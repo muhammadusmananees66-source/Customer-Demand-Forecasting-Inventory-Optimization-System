@@ -69,3 +69,6 @@ kfp==2.6.0
 # kfp-pipeline-spec==0.2.0     kfp==2.6.0 will install the correct version automatically.
 # kubernetes==27.2.0
 kubernetes==26.1.0
+# MESSAGE BROKER used in other file big data requirements.txt
+# kafka-python==2.0.2
+# aiokafka==0.12.0
