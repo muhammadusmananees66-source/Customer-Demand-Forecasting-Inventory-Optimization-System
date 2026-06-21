@@ -1,0 +1,43 @@
+# ============================================
+# PYTORCH ECOSYSTEM
+# ============================================
+torch==2.1.2
+torchvision==0.16.2
+torchaudio==2.1.2
+pytorch-lightning==2.1.3
+torchmetrics==1.3.0
+torchdata==0.7.1
+torchtext==0.16.2
+
+# ============================================
+# HUGGING FACE
+# ============================================
+transformers==4.36.2
+datasets==2.14.6
+huggingface-hub==0.20.3
+tokenizers==0.15.0
+safetensors==0.4.1
+
+# ============================================
+# TENSORBOARD
+# ============================================
+tensorboard==2.15.0
+tensorboardX==2.6.2
+
+# ============================================
+# DISTRIBUTED TRAINING
+# ============================================
+# ray==2.9.0
+# ray[tune]==2.9.0
+# ray[serve]==2.9.0
+# ray[data]==2.9.0 it is commentetd out due to incompatibility
+# ray[rllib]==2.9.0
+
+
+# If Ray is required later, install a modern version:
+
+# pip install "ray[default]"
+
+# or
+
+# pip install "ray[tune]"
