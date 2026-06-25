@@ -1,0 +1,221 @@
+# ============================================
+# CORE DATA PROCESSING & SCIENTIFIC COMPUTING
+# ============================================
+numpy
+pandas
+scipy
+statsmodels
+matplotlib
+seaborn
+joblib
+scikit-learn
+
+# ============================================
+# DATA VALIDATION & QUALITY
+# ============================================
+great-expectations
+pandera
+pydantic
+jsonschema
+
+# ============================================
+# UTILITIES
+# ============================================
+click
+tqdm
+python-dotenv
+colorama
+tabulate
+pyyaml
+typing-extensions
+packaging
+attrs
+six
+# subprocess removed - it's built into Python!
+
+# ============================================
+# FILE HANDLING & SERIALIZATION
+# ============================================
+openpyxl
+xlrd
+pyarrow
+h5py
+fsspec
+protobuf
+# json removed - built into Python!
+# hashlib removed - built into Python!
+
+# ============================================
+# MACHINE LEARNING - GRADIENT BOOSTING
+# ============================================
+xgboost
+lightgbm
+catboost
+
+# ============================================
+# HYPERPARAMETER OPTIMIZATION
+# ============================================
+optuna
+optuna-dashboard
+hyperopt
+scikit-optimize
+
+# ============================================
+# MODEL INTERPRETATION
+# ============================================
+shap
+lime
+eli5
+interpret
+
+# ============================================
+# TIME SERIES
+# ============================================
+pmdarima
+prophet
+tsfresh
+sktime
+
+# ============================================
+# FEATURE ENGINEERING & PREPROCESSING
+# ============================================
+feature-engine
+category-encoders
+skrub
+imbalanced-learn
+
+# ============================================
+# DEEP LEARNING - PYTORCH ECOSYSTEM
+# ============================================
+torch
+torchvision
+torchaudio
+pytorch-lightning
+torchmetrics
+
+# ============================================
+# HUGGING FACE ECOSYSTEM
+# ============================================
+transformers
+datasets
+huggingface-hub
+tokenizers
+safetensors
+
+# ============================================
+# TENSORBOARD
+# ============================================
+tensorboard
+tensorboardX
+
+# ============================================
+# OBSERVABILITY & TELEMETRY
+# ============================================
+opentelemetry-sdk
+opentelemetry-api
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-requests
+opentelemetry-instrumentation-asgi
+
+# ============================================
+# BIG DATA - APACHE SPARK
+# ============================================
+pyspark
+py4j
+
+# ============================================
+# BIG DATA - DASK
+# ============================================
+dask
+distributed
+
+# ============================================
+# STREAMING - KAFKA
+# ============================================
+kafka-python
+aiokafka
+
+# ============================================
+# AWS SERVICES
+# ============================================
+boto3
+botocore
+s3transfer
+awscli
+aiobotocore
+
+# ============================================
+# CLOUD STORAGE
+# ============================================
+s3fs
+gcsfs
+google-cloud-storage
+google-cloud-core
+google-auth
+google-api-core
+
+# ============================================
+# SERIALIZATION
+# ============================================
+cloudpickle
+msgpack
+dill
+cbor2
+
+# ============================================
+# MLOPS - EXPERIMENT TRACKING
+# ============================================
+mlflow
+mlflow-skinny
+dagshub
+
+# ============================================
+# HTTP & NETWORKING
+# ============================================
+httpx
+h11
+
+# ============================================
+# DATA VERSION CONTROL
+# ============================================
+dvc
+
+# ============================================
+# WEB FRAMEWORKS & API SERVING
+# ============================================
+fastapi
+uvicorn
+gunicorn
+pydantic-settings
+asgiref
+
+# ============================================
+# REDIS - FEATURE STORE
+# ============================================
+redis
+hiredis
+
+# ============================================
+# MONITORING & PROFILING
+# ============================================
+prometheus-client
+psutil
+memory-profiler
+line-profiler
+loguru
+coloredlogs
+python-json-logger
+structlog
+
+# ============================================
+# KUBEFLOW
+# ============================================
+kfp
+
+# ============================================
+# OPTIONAL - DISTRIBUTED TRAINING
+# (Uncomment if needed, but may conflict with pyarrow)
+# ============================================
+# ray[tune]

@@ -3,3 +3,4 @@
 -r requirements/requirements-dl.txt
 -r requirements/requirements-bigdata.txt
 -r requirements/requirements-mlops.txt
+-r requirements/requirements-ray.txt

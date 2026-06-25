@@ -1,3 +1,107 @@
+# # ============================================
+# # APACHE SPARK
+# # ============================================
+# pyspark==3.5.0
+# py4j==0.10.9.7
+
+# # ============================================
+# # DASK (Distributed Computing)
+# # ============================================
+# dask==2023.11.0
+# # dask-core==2023.11.0
+# distributed==2023.11.0
+
+# # ============================================
+# # KAFKA (Streaming)
+# # ============================================
+# kafka-python==2.0.2
+# aiokafka==0.8.0
+
+# # ============================================
+# # AWS SERVICES
+# # ============================================
+# boto3==1.34.0
+# botocore==1.34.0
+# # s3transfer==0.10.0
+# awscli==1.32.0
+
+# # ============================================
+# # CLOUD STORAGE
+# # ============================================
+# s3fs==2023.12.2
+# gcsfs>=2023.12.2,<2024.0.0
+# # gcsfs==2023.12.2
+# google-cloud-storage==2.14.0
+# google-cloud-core==2.4.1
+# google-auth==2.26.1
+# google-api-core==2.15.0
+
+# # ============================================
+# # SERIALIZATION
+# # ============================================
+# cloudpickle==3.0.0
+# msgpack==1.0.7
+# dill==0.3.7
+# # pickle5==0.0.12
+# cbor2==5.4.6
+
+
+
+
+
+# # ============================================
+# # APACHE SPARK
+# # ============================================
+# pyspark==3.5.0
+# py4j==0.10.9.7
+
+# # ============================================
+# # DASK
+# # ============================================
+# dask==2023.11.0
+# distributed==2023.11.0
+
+# # ============================================
+# # KAFKA
+# # ============================================
+# kafka-python==2.0.2
+# aiokafka==0.8.0
+
+# # ============================================
+# # AWS SERVICES
+# # ============================================
+# boto3==1.34.0
+# botocore==1.34.0
+# awscli==1.32.0
+
+# # ============================================
+# # CLOUD STORAGE — all pinned to fsspec==2023.10.0
+# # ============================================
+# s3fs==2023.10.0
+# gcsfs==2023.10.0
+# google-cloud-storage==2.14.0
+# google-cloud-core==2.4.1
+# google-auth==2.26.1
+# google-api-core==2.15.0
+
+# # ============================================
+# # SERIALIZATION
+# # ============================================
+# cloudpickle==3.0.0
+# msgpack==1.0.7
+# dill==0.3.7
+# cbor2==5.4.6
+
+
+
+
+
+
+
+
+
+
+
 # ============================================
 # APACHE SPARK
 # ============================================
@@ -5,32 +109,49 @@ pyspark==3.5.0
 py4j==0.10.9.7
 
 # ============================================
-# DASK (Distributed Computing)
+# DASK
+# Pinned to 2024.8.1, not 2023.11.0, because dask-expr (the default
+# DataFrame query-planning backend since dask 2024.3.0) is present in
+# this environment as dask-expr==1.1.11, which hard-requires dask==2024.8.1
+# exactly. dask and dask-expr are released in lockstep — always check
+# what dask-expr version is installed before changing this pin.
 # ============================================
-dask==2023.11.0
-# dask-core==2023.11.0
-distributed==2023.11.0
+dask==2024.8.1
+distributed==2024.8.1
 
 # ============================================
-# KAFKA (Streaming)
+# KAFKA
 # ============================================
 kafka-python==2.0.2
 aiokafka==0.8.0
 
 # ============================================
-# AWS SERVICES
+# AWS STACK
+# LOCKED CHAIN — do not bump any one of these alone:
+#   s3fs==2023.10.0    requires aiobotocore>=2.7.0,<2.8.0
+#   aiobotocore==2.7.0 requires botocore>=1.31.16,<1.31.65
+#   boto3==1.28.64     is the last boto3 patch whose required
+#                      botocore (1.31.64) still fits under that <1.31.65 ceiling
+# Bumping boto3/botocore even one patch breaks the aiobotocore ceiling.
+# To upgrade this block, upgrade s3fs/aiobotocore/boto3/botocore together
+# and re-resolve, not individually.
 # ============================================
-boto3==1.34.0
-botocore==1.34.0
-# s3transfer==0.10.0
-awscli==1.32.0
+boto3==1.28.64
+botocore==1.31.64
+s3transfer==0.7.0
+awscli==1.29.64
+aiobotocore==2.7.0
 
 # ============================================
 # CLOUD STORAGE
+# fsspec pinned explicitly here (not just relying on requirements-base.txt)
+# because pip resolves per invocation: if this file is ever installed
+# in a separate command/CI step from base.txt, there is nothing else
+# in this file forcing the version otherwise.
 # ============================================
-s3fs==2023.12.2
-gcsfs>=2023.12.2,<2024.0.0
-# gcsfs==2023.12.2
+fsspec==2023.10.0
+s3fs==2023.10.0
+gcsfs==2023.10.0
 google-cloud-storage==2.14.0
 google-cloud-core==2.4.1
 google-auth==2.26.1
@@ -42,5 +163,4 @@ google-api-core==2.15.0
 cloudpickle==3.0.0
 msgpack==1.0.7
 dill==0.3.7
-# pickle5==0.0.12
 cbor2==5.4.6
