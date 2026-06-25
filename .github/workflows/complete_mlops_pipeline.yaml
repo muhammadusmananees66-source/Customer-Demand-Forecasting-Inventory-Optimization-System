@@ -32,7 +32,7 @@ jobs:
       - name: Fetch data sources
         run: make data-sources
       - name: Upload data
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: raw-data
           path: data/raw/
@@ -48,7 +48,7 @@ jobs:
       - name: Run ingestion
         run: make ingestion
       - name: Upload ingested data
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ingested-data
           path: data/ingested/
@@ -73,7 +73,7 @@ jobs:
       - name: Run validation
         run: make validation
       - name: Upload validation report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: validation-reports
           path: reports/validation/
@@ -87,7 +87,7 @@ jobs:
       - name: Run preprocessing
         run: make preprocessing
       - name: Upload processed data
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: processed-data
           path: data/processed/
@@ -112,7 +112,7 @@ jobs:
       - name: Train models
         run: make training
       - name: Upload models
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trained-models
           path: models/
@@ -126,7 +126,7 @@ jobs:
       - name: Evaluate models
         run: make evaluation
       - name: Upload evaluation reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: evaluation-reports
           path: reports/evaluation/
