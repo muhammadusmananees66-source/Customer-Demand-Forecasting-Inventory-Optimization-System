@@ -1,0 +1,212 @@
+name: Complete MLOps Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.10'
+  DOCKER_REGISTRY: ghcr.io
+  DOCKER_IMAGE_NAME: ${{ github.repository }}
+  KUBE_NAMESPACE: demand-forecast-prod
+  MLFLOW_TRACKING_URI: http://mlflow-service:5000
+
+jobs:
+  # Stage 1: Data Sources
+  data-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Fetch data sources
+        run: make data-sources
+      - name: Upload data
+        uses: actions/upload-artifact@v3
+        with:
+          name: raw-data
+          path: data/raw/
+
+  # Stage 2: Ingestion
+  ingestion:
+    needs: data-sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Kafka
+        run: docker-compose up -d kafka zookeeper
+      - name: Run ingestion
+        run: make ingestion
+      - name: Upload ingested data
+        uses: actions/upload-artifact@v3
+        with:
+          name: ingested-data
+          path: data/ingested/
+
+  # Stage 3: Data Lake
+  data-lake:
+    needs: ingestion
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup MinIO
+        run: docker-compose up -d minio
+      - name: Store in data lake
+        run: make data-lake
+
+  # Stage 4: Validation & EDA
+  validation:
+    needs: data-lake
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run validation
+        run: make validation
+      - name: Upload validation report
+        uses: actions/upload-artifact@v3
+        with:
+          name: validation-reports
+          path: reports/validation/
+
+  # Stage 5: Preprocessing
+  preprocessing:
+    needs: validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run preprocessing
+        run: make preprocessing
+      - name: Upload processed data
+        uses: actions/upload-artifact@v3
+        with:
+          name: processed-data
+          path: data/processed/
+
+  # Stage 6: Feature Store
+  feature-store:
+    needs: preprocessing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Redis
+        run: docker-compose up -d redis
+      - name: Build feature store
+        run: make feature-store
+
+  # Stage 7: Training
+  training:
+    needs: feature-store
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Train models
+        run: make training
+      - name: Upload models
+        uses: actions/upload-artifact@v3
+        with:
+          name: trained-models
+          path: models/
+
+  # Stage 8: Evaluation & Tuning
+  evaluation:
+    needs: training
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Evaluate models
+        run: make evaluation
+      - name: Upload evaluation reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: evaluation-reports
+          path: reports/evaluation/
+
+  # Stage 9: MLflow Registry
+  mlflow-registry:
+    needs: evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup MLflow
+        run: docker-compose up -d mlflow postgres
+      - name: Register models
+        run: make mlflow-registry
+
+  # Stage 10: Docker Build
+  docker-build:
+    needs: mlflow-registry
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        run: make docker-build
+
+  # Stage 11: Kubernetes Deploy
+  k8s-deploy:
+    needs: docker-build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Deploy to K8s
+        run: make k8s-deploy
+
+  # Stage 12: Monitoring
+  monitoring:
+    needs: k8s-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup monitoring
+        run: make monitoring
+
+  # Stage 13: Drift Detection
+  drift-detection:
+    needs: monitoring
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup drift detection
+        run: make drift-detection
+
+  # Stage 14: Retraining Pipeline
+  retraining:
+    needs: drift-detection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup retraining
+        run: make retraining
+
+  # Final Status
+  finalize:
+    needs: [data-sources, ingestion, data-lake, validation, preprocessing,
+            feature-store, training, evaluation, mlflow-registry, docker-build,
+            k8s-deploy, monitoring, drift-detection, retraining]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send notification
+        run: |
+          echo "✅ Complete MLOps Pipeline Finished!"
+          echo "All 14 stages completed successfully!"

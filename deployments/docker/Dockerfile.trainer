@@ -1,0 +1,41 @@
+FROM nvidia/cuda:12.1-runtime-ubuntu22.04 AS builder
+
+WORKDIR /app
+
+# Install Python and dependencies
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-pip \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+# COPY requirements.txt .
+# RUN pip3 install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+COPY requirements/ ./requirements/
+
+RUN pip install --no-cache-dir -r requirements.txt
+# Production stage
+FROM nvidia/cuda:12.1-runtime-ubuntu22.04
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/bin/python3.10 /usr/bin/python
+
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY src/ ./src/
+COPY configs/ ./configs/
+
+ENV PYTHONPATH=/app
+ENV CUDA_VISIBLE_DEVICES=0
+
+ENTRYPOINT ["python", "src/training/distributed_training.py"]
+CMD ["--config", "configs/config.yaml"]

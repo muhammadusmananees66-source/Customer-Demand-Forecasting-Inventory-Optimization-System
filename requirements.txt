@@ -1,0 +1,5 @@
+-r requirements/requirements-base.txt
+-r requirements/requirements-ml.txt
+-r requirements/requirements-dl.txt
+-r requirements/requirements-bigdata.txt
+-r requirements/requirements-mlops.txt
