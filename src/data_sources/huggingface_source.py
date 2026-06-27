@@ -548,9 +548,6 @@ except ImportError:
     pass
 # ==========================================================
 
-
-
-
 import aiohttp
 import numpy as np
 import pandas as pd
@@ -800,55 +797,48 @@ class HuggingFaceDemandSource(DataSource):
                 "timestamp": timestamp,
             }
 
+    # ==========================================================
+    # ✅ CHANGED: validate_source() method
+    # ==========================================================
     def validate_source(self) -> bool:
         """
         Validate data source connectivity.
-        Handles Windows DLL issues gracefully.
+        ✅ Tries streaming first (works with datasets==2.21.0)
+        ✅ Falls back to eager loading if streaming fails
+        ✅ Handles Windows DLL issues gracefully
         """
         try:
-            if self.use_streaming:
-                # Try streaming validation
-                test_dataset = load_dataset(
-                    "imdb",
-                    split="train",
-                    streaming=True,
-                )
-                next(iter(test_dataset.take(1)))
-                logger.info("Hugging Face source validation successful (streaming).")
-                return True
-            else:
-                # Try eager loading validation (Windows fallback)
+            # ✅ Try streaming validation first
+            test_dataset = load_dataset(
+                "imdb",
+                split="train",
+                streaming=True,
+            )
+            next(iter(test_dataset.take(1)))
+            logger.info("Hugging Face source validation successful (streaming).")
+            return True
+
+        except Exception as e:
+            # ✅ If streaming fails, try eager loading
+            logger.warning(
+                "Streaming validation failed: %s. Trying eager loading...", e
+            )
+            try:
                 test_dataset = load_dataset(
                     "imdb",
                     split="train[:1]",
                 )
                 _ = test_dataset[0]
-                logger.info("Hugging Face source validation successful (eager).")
-                return True
-
-        except OSError as e:
-            if "WinError 1114" in str(e) or "c10.dll" in str(e):
-                logger.warning(
-                    "Windows DLL issue detected. Attempting fallback validation."
+                logger.info(
+                    "Hugging Face source validation successful (eager fallback)."
                 )
-                try:
-                    # Fallback: Try without streaming
-                    fallback_dataset = load_dataset(
-                        "imdb",
-                        split="train[:1]",
-                    )
-                    _ = fallback_dataset[0]
-                    logger.info("Validation successful via fallback method.")
-                    return True
-                except Exception as fallback_error:
-                    logger.exception("Fallback validation failed: %s", fallback_error)
-                    return False
-            logger.exception("Validation failed: %s", e)
-            return False
-
-        except Exception as e:
-            logger.exception("Validation failed: %s", e)
-            return False
+                return True
+            except Exception as fallback_error:
+                logger.exception(
+                    "Validation failed (both streaming and eager): %s",
+                    fallback_error
+                )
+                return False
 
 
 # ==========================================================
