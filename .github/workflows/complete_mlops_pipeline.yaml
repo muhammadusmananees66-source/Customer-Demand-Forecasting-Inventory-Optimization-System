@@ -300,11 +300,21 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+      # ✅ FIX: Create virtual environment first
+      - name: Create virtual environment
+        run: uv venv
       
+      # ✅ FIX: Activate and sync dependencies
+      - name: Install dependencies from lock file
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
+      
+      # ✅ FIX: Activate before verification
       - name: Verify installation
-        run: uv pip check
+        run: |
+          source .venv/bin/activate
+          uv pip check
 
   # ============================================
   # Stage 1: Data Sources
@@ -327,11 +337,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv for each job
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Fetch data sources
-        run: make data-sources
+        run: |
+          source .venv/bin/activate
+          make data-sources
       
       - name: Upload data
         uses: actions/upload-artifact@v4
@@ -360,14 +378,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Start Kafka
         run: docker-compose up -d kafka zookeeper
       
       - name: Run ingestion
-        run: make ingestion
+        run: |
+          source .venv/bin/activate
+          make ingestion
       
       - name: Upload ingested data
         uses: actions/upload-artifact@v4
@@ -396,14 +422,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup MinIO
         run: docker-compose up -d minio
       
       - name: Store in data lake
-        run: make data-lake
+        run: |
+          source .venv/bin/activate
+          make data-lake
 
   # ============================================
   # Stage 4: Validation & EDA
@@ -426,11 +460,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Run validation
-        run: make validation
+        run: |
+          source .venv/bin/activate
+          make validation
       
       - name: Upload validation report
         uses: actions/upload-artifact@v4
@@ -459,11 +501,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Run preprocessing
-        run: make preprocessing
+        run: |
+          source .venv/bin/activate
+          make preprocessing
       
       - name: Upload processed data
         uses: actions/upload-artifact@v4
@@ -492,14 +542,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup Redis
         run: docker-compose up -d redis
       
       - name: Build feature store
-        run: make feature-store
+        run: |
+          source .venv/bin/activate
+          make feature-store
 
   # ============================================
   # Stage 7: Training
@@ -522,11 +580,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Train models
-        run: make training
+        run: |
+          source .venv/bin/activate
+          make training
       
       - name: Upload models
         uses: actions/upload-artifact@v4
@@ -555,11 +621,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Evaluate models
-        run: make evaluation
+        run: |
+          source .venv/bin/activate
+          make evaluation
       
       - name: Upload evaluation reports
         uses: actions/upload-artifact@v4
@@ -588,14 +662,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup MLflow
         run: docker-compose up -d mlflow postgres
       
       - name: Register models
-        run: make mlflow-registry
+        run: |
+          source .venv/bin/activate
+          make mlflow-registry
 
   # ============================================
   # Stage 10: Docker Build
@@ -655,11 +737,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup monitoring
-        run: make monitoring
+        run: |
+          source .venv/bin/activate
+          make monitoring
 
   # ============================================
   # Stage 13: Drift Detection
@@ -682,11 +772,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup drift detection
-        run: make drift-detection
+        run: |
+          source .venv/bin/activate
+          make drift-detection
 
   # ============================================
   # Stage 14: Retraining Pipeline
@@ -709,11 +807,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
+      # ✅ FIX: Create and activate venv
+      - name: Create virtual environment
+        run: uv venv
+      
       - name: Install dependencies from lock file
-        run: uv pip sync uv.lock
+        run: |
+          source .venv/bin/activate
+          uv pip sync uv.lock
       
       - name: Setup retraining
-        run: make retraining
+        run: |
+          source .venv/bin/activate
+          make retraining
 
   # ============================================
   # Final Status
