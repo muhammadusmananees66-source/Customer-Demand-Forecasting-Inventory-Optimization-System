@@ -533,6 +533,24 @@ from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Union, AsyncGenerator, Generator
 
+# ==========================================================
+# ✅ COMPATIBILITY FIX: PyArrow Runtime Patch
+# ==========================================================
+# Fixes: AttributeError: module 'pyarrow' has no attribute 'PyExtensionType'
+# This patches pyarrow at runtime without changing any installed packages.
+# Can be removed when pyarrow is updated to a compatible version.
+try:
+    import pyarrow as pa
+    if not hasattr(pa, 'PyExtensionType'):
+        pa.PyExtensionType = pa.ExtensionType
+        print("✅ PyArrow patched for compatibility")
+except ImportError:
+    pass
+# ==========================================================
+
+
+
+
 import aiohttp
 import numpy as np
 import pandas as pd
