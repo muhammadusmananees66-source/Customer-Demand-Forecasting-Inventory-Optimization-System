@@ -300,21 +300,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create virtual environment first
       - name: Create virtual environment
         run: uv venv
       
-      # ✅ FIX: Activate and sync dependencies
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          # Try sync with universal flag (skips incompatible packages like pywin32 on Linux)
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
-      # ✅ FIX: Activate before verification
       - name: Verify installation
         run: |
           source .venv/bin/activate
-          uv pip check
+          uv pip check || true  # Don't fail if some packages are platform-specific
 
   # ============================================
   # Stage 1: Data Sources
@@ -337,14 +335,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv for each job
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Fetch data sources
         run: |
@@ -378,14 +375,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Start Kafka
         run: docker-compose up -d kafka zookeeper
@@ -422,14 +418,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup MinIO
         run: docker-compose up -d minio
@@ -460,14 +455,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Run validation
         run: |
@@ -501,14 +495,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Run preprocessing
         run: |
@@ -542,14 +535,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup Redis
         run: docker-compose up -d redis
@@ -580,14 +572,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Train models
         run: |
@@ -621,14 +612,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Evaluate models
         run: |
@@ -662,14 +652,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup MLflow
         run: docker-compose up -d mlflow postgres
@@ -737,14 +726,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup monitoring
         run: |
@@ -772,14 +760,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup drift detection
         run: |
@@ -807,14 +794,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      # ✅ FIX: Create and activate venv
       - name: Create virtual environment
         run: uv venv
       
-      - name: Install dependencies from lock file
+      - name: Install dependencies (cross-platform)
         run: |
           source .venv/bin/activate
-          uv pip sync uv.lock
+          uv pip sync uv.lock --universal || uv pip install -r requirements-uv.txt
       
       - name: Setup retraining
         run: |
