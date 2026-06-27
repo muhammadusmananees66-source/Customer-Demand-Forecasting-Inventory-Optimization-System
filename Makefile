@@ -24,8 +24,8 @@ help: ## Show all commands
 data-sources: ## Fetch data from Hugging Face and other sources
 	@printf '${YELLOW}[1/14] Fetching data sources...${NC}\n'
 	$(PYTHON) src/data_sources/huggingface_source.py
-	$(PYTHON) src/data_sources/sales_api.py
-	$(PYTHON) src/data_sources/weather_api.py
+# 	$(PYTHON) src/data_sources/sales_api.py
+# 	$(PYTHON) src/data_sources/weather_api.py
 	@printf '${GREEN}✅ Data sources fetched${NC}\n'
 
 # Stage 2: Ingestion Layer
