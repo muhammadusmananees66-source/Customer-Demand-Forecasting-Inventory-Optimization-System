@@ -1,0 +1,172 @@
+[project]
+name = "customer-demand-forecasting"
+version = "0.1.0"
+description = "Customer Demand Forecasting & Inventory Optimization System"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [
+    {name = "MLOps Team", email = "mlops@company.com"}
+]
+license = {text = "MIT"}
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "statsmodels",
+    "matplotlib",
+    "seaborn",
+    "joblib",
+    "scikit-learn",
+    "great-expectations",
+    "pandera",
+    "pydantic",
+    "jsonschema",
+    "click",
+    "tqdm",
+    "python-dotenv",
+    "colorama",
+    "tabulate",
+    "pyyaml",
+    "typing-extensions",
+    "packaging",
+    "attrs",
+    "six",
+    "openpyxl",
+    "xlrd",
+    "pyarrow",
+    "h5py",
+    "fsspec",
+    "protobuf",
+    "xgboost",
+    "lightgbm",
+    "catboost",
+    "optuna",
+    "optuna-dashboard",
+    "hyperopt",
+    "scikit-optimize",
+    "lime",
+    "eli5",
+    "interpret",
+    "pmdarima",
+    "prophet",
+    "tsfresh",
+    "sktime>=0.25.0",
+    "feature-engine",
+    "category-encoders",
+    "skrub",
+    "imbalanced-learn",
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "pytorch-lightning",
+    "torchmetrics",
+    "transformers",
+    "datasets",
+    "huggingface-hub",
+    "tokenizers",
+    "safetensors",
+    "tensorboard",
+    "tensorboardX",
+    "pyspark",
+    "py4j",
+    "dask",
+    "distributed",
+    "kafka-python",
+    "aiokafka",
+    "boto3",
+    "botocore",
+    "s3transfer",
+    "awscli",
+    "aiobotocore",
+    "s3fs",
+    "gcsfs",
+    "google-cloud-storage",
+    "google-cloud-core",
+    "google-auth",
+    "google-api-core",
+    "cloudpickle",
+    "msgpack",
+    "dill",
+    "cbor2",
+    "mlflow",
+    "mlflow-skinny",
+    "dagshub",
+    "httpx",
+    "h11",
+    "dvc",
+    "fastapi",
+    "uvicorn",
+    "gunicorn",
+    "pydantic-settings",
+    "asgiref",
+    "redis",
+    "hiredis",
+    "prometheus-client",
+    "psutil",
+    "memory-profiler",
+    "line-profiler",
+    "loguru",
+    "coloredlogs",
+    "python-json-logger",
+    "structlog",
+    "opentelemetry-sdk",
+    "opentelemetry-api",
+    "opentelemetry-exporter-otlp",
+    "opentelemetry-instrumentation",
+    "opentelemetry-instrumentation-fastapi",
+    "opentelemetry-instrumentation-requests",
+    "opentelemetry-instrumentation-asgi",
+    "kfp",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-xdist",
+    "pytest-mock",
+    "ruff",
+    "mypy",
+    "black",
+    "pre-commit",
+    "testcontainers",
+]
+
+ray = [
+    "ray[tune]",
+]
+
+gpu = [
+    "torch",
+]
+
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.uv.extra-build-dependencies]
+sktime = ["pkg_resources"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.mypy]
+ignore_missing_imports = true
+python_version = "3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=src --cov-report=html --cov-report=xml"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "e2e: End-to-end tests",
+    "slow: Slow tests",
+]
