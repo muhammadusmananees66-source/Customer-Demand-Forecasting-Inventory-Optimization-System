@@ -2,6 +2,8 @@ README.md
 pyproject.toml
 src/business/__init__.py
 src/business/requirements.py
+src/data/__init__.py
+src/data/collectors.py
 src/demand_forecasting.egg-info/PKG-INFO
 src/demand_forecasting.egg-info/SOURCES.txt
 src/demand_forecasting.egg-info/dependency_links.txt
