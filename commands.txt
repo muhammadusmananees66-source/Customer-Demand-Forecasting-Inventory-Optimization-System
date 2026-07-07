@@ -1,0 +1,36 @@
+    1  rm -rf src
+    # remove all 
+    2  rm -rf *
+    3  rm -rf .venv
+    4  rm -rf .gitignore
+    5  rm -rf .github
+    # check status of usage of space
+    6  df -h
+    7  du -sh ~/* 2>/dev/null | sort -h
+    8  du -sh ~/.??* 2>/dev/null | sort -h
+    9  # Check Python version (requires 3.10+)
+   10  python --version
+   11  du -h --max-depth=1 ~/.local | sort -h
+   12  du -h --max-depth=1 ~/.local/share | sort -h
+   # remove cashe
+   13  rm -rf ~/.cache/*
+   14  du -sh ~/.local
+   15  du -sh ~/.cache
+   16  df -h
+   17  # Check Python version (requires 3.10+)
+   18  python --version
+   19  # Verify uv installation
+   20  uv --version
+   21  # Initialize with uv
+   22  uv init
+   23  df -h
+   24  # Install all dependencies
+   25  uv sync --all-extras --all-groups
+   26  # Install dependencies - UV handles everything
+   27  uv sync
+   28  # Check what was installed
+   29  uv pip list
+   30  # See lock file
+   31  cat uv.lock
+   32  source .venv/bin/activate
+   33  history > commands.txt
