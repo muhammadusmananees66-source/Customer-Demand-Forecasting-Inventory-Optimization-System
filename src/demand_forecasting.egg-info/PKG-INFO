@@ -1,0 +1,59 @@
+Metadata-Version: 2.4
+Name: demand-forecasting
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: aiohttp
+Requires-Dist: bcrypt
+Requires-Dist: fastapi
+Requires-Dist: httpx
+Requires-Dist: PyJWT
+Requires-Dist: mlflow
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: prometheus-client
+Requires-Dist: pydantic
+Requires-Dist: pydantic-settings
+Requires-Dist: ray
+Requires-Dist: redis
+Requires-Dist: scikit-learn
+Requires-Dist: structlog
+Requires-Dist: tenacity
+Requires-Dist: xgboost
+Requires-Dist: uvicorn[standard]
+Requires-Dist: python-dotenv
+Requires-Dist: pyyaml
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-mock; extra == "dev"
+Requires-Dist: pytest-xdist; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: bandit; extra == "dev"
+Requires-Dist: pre-commit; extra == "dev"
+Provides-Extra: aws
+Requires-Dist: boto3; extra == "aws"
+Provides-Extra: kafka
+Requires-Dist: confluent-kafka; extra == "kafka"
+Provides-Extra: feast
+Requires-Dist: feast; extra == "feast"
+Requires-Dist: pyarrow; extra == "feast"
+Provides-Extra: monitoring
+Requires-Dist: opentelemetry-api; extra == "monitoring"
+Requires-Dist: opentelemetry-sdk; extra == "monitoring"
+Requires-Dist: opentelemetry-exporter-otlp; extra == "monitoring"
+Requires-Dist: opentelemetry-instrumentation-fastapi; extra == "monitoring"
+Provides-Extra: all
+Requires-Dist: boto3; extra == "all"
+Requires-Dist: confluent-kafka; extra == "all"
+Requires-Dist: feast; extra == "all"
+Requires-Dist: pyarrow; extra == "all"
+Requires-Dist: opentelemetry-api; extra == "all"
+Requires-Dist: opentelemetry-sdk; extra == "all"
+Requires-Dist: opentelemetry-exporter-otlp; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-fastapi; extra == "all"

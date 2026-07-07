@@ -34,3 +34,146 @@
    31  cat uv.lock
    32  source .venv/bin/activate
    33  history > commands.txt
+    
+    1  rm -rf src
+    2  rm -rf *
+    3  rm -rf .venv
+    4  rm -rf .gitignore
+    5  rm -rf .github
+    6  df -h
+    7  du -sh ~/* 2>/dev/null | sort -h
+    8  du -sh ~/.??* 2>/dev/null | sort -h
+    9  # Check Python version (requires 3.10+)
+   10  python --version
+   11  du -h --max-depth=1 ~/.local | sort -h
+   12  du -h --max-depth=1 ~/.local/share | sort -h
+   13  rm -rf ~/.cache/*
+   14  du -sh ~/.local
+   15  du -sh ~/.cache
+   16  df -h
+   17  # Check Python version (requires 3.10+)
+   18  python --version
+   19  # Verify uv installation
+   20  uv --version
+   21  # Initialize with uv
+   22  uv init
+   23  df -h
+   24  # Install all dependencies
+   25  uv sync --all-extras --all-groups
+   26  # Install dependencies - UV handles everything
+   27  uv sync
+   28  # Check what was installed
+   29  uv pip list
+   30  # See lock file
+   31  cat uv.lock
+   32  source .venv/bin/activate
+   33  history > commands.txt
+   34  git add .
+   35  git status
+   36  git commit -m "updated files"
+   37  git push origin main
+   38  df -h
+    1  rm -rf src
+    2  rm -rf *
+    3  rm -rf .venv
+    4  rm -rf .gitignore
+    5  rm -rf .github
+    6  df -h
+    7  du -sh ~/* 2>/dev/null | sort -h
+    8  du -sh ~/.??* 2>/dev/null | sort -h
+    9  # Check Python version (requires 3.10+)
+   10  python --version
+   11  du -h --max-depth=1 ~/.local | sort -h
+   12  du -h --max-depth=1 ~/.local/share | sort -h
+   13  rm -rf ~/.cache/*
+   14  du -sh ~/.local
+   15  du -sh ~/.cache
+   16  df -h
+   17  # Check Python version (requires 3.10+)
+   18  python --version
+   19  # Verify uv installation
+   20  uv --version
+   21  # Initialize with uv
+   22  uv init
+   23  df -h
+   24  # Install all dependencies
+   25  uv sync --all-extras --all-groups
+   26  # Install dependencies - UV handles everything
+   27  uv sync
+   28  # Check what was installed
+   29  uv pip list
+   30  # See lock file
+   31  cat uv.lock
+   32  source .venv/bin/activate
+   33  history > commands.txt
+   34  git add .
+   35  git status
+   36  git commit -m "updated files"
+   37  git push origin main
+   38  df -h
+   39  history >> commands
+   40  rm -rf commands
+   41  mkdir -p src && touch src/business/requirements.py
+   42  rm -rf src
+   43  mkdir -p src/business && touch src/business/requirements.py
+   44  mkdir -p tests/unit && touch tests/unit/test_business_requirements.py
+   45  tree -L 3
+   46  *.egg-info/
+   47  demand_forecasting.egg-info/
+   48  # Create __init__.py for business module
+   49  cat > src/business/__init__.py << 'EOF'
+"""Business requirements and KPIs module."""
+EOF
+
+   50  # Create __init__.py for tests
+   51  cat > tests/unit/__init__.py << 'EOF'
+"""Unit tests."""
+EOF
+
+   52  # Run all tests
+   53  uv run pytest tests/unit/test_business_requirements.py -v
+   54  # Run all tests
+   55  uv run -m  pytest tests/unit/test_business_requirements.py -v
+   56  # Run with coverage
+   57  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
+   58  # Install pytest-cov
+   59  uv pip install pytest-cov
+   60  # Run with coverage
+   61  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
+   62  # Run with coverage
+   63  uv run -m pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
+   64  # Run specific test
+   65  uv run pytest tests/unit/test_business_requirements.py::TestProjectRequirements::test_project_requirements_creation -v
+   66  # Run specific test
+   67  uv run -m pytest tests/unit/test_business_requirements.py::TestProjectRequirements::test_project_requirements_creation -v
+   68  mkdir -p scripts && touch scripts/verify_business_requirements.py
+   69  # Make it executable
+   70  chmod +x scripts/verify_business_requirements.py
+   71  # Run the verification script
+   72  uv run python scripts/verify_business_requirements.py
+   73  # Run the verification script
+   74  uv run -m python scripts/verify_business_requirements.py
+   75  # Install the package in development mode
+   76  uv pip install -e .
+   77  # Now run the script
+   78  uv run python scripts/verify_business_requirements.py
+   79  # Run verification
+   80  uv run python -m scripts/verify_business_requirements.py
+   81  # Run verification
+   82  uv run -m python scripts/verify_business_requirements.py
+   83  # Run the verification script
+   84  uv run -m python scripts.verify_business_requirements.py
+   85  # Package installed with uv pip install -e .
+   86  uv run python scripts/verify_business_requirements.py
+   87  uv run python -m scripts.verify_business_requirements
+   88  # 1. Import test
+   89  uv run python -c "from src.business.requirements import ProjectRequirements; print('✅ Import successful')"
+   90  # 4. Run with coverage
+   91  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=html
+   92  # 4. Run with coverage
+   93  uv run -m pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=html
+   94  # 5. Full test suite
+   95  uv run pytest tests/ -v
+   96  # 5. Full test suite
+   97  uv run -m pytest tests/ -v
+   98  history >> commands.txt
