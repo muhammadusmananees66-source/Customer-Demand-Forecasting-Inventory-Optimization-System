@@ -1,0 +1,23 @@
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Egg info
+*.egg-info/
+*.egg
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Temporary files
+*.log
+*.tmp
+commands.txt
+
+# UV cache
+.uv_cache/

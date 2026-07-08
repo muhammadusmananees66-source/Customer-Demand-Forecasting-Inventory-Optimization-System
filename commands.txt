@@ -1,179 +1,146 @@
-    1  rm -rf src
-    # remove all 
-    2  rm -rf *
-    3  rm -rf .venv
-    4  rm -rf .gitignore
-    5  rm -rf .github
-    # check status of usage of space
-    6  df -h
-    7  du -sh ~/* 2>/dev/null | sort -h
-    8  du -sh ~/.??* 2>/dev/null | sort -h
-    9  # Check Python version (requires 3.10+)
-   10  python --version
-   11  du -h --max-depth=1 ~/.local | sort -h
-   12  du -h --max-depth=1 ~/.local/share | sort -h
-   # remove cashe
-   13  rm -rf ~/.cache/*
-   14  du -sh ~/.local
-   15  du -sh ~/.cache
-   16  df -h
-   17  # Check Python version (requires 3.10+)
-   18  python --version
-   19  # Verify uv installation
-   20  uv --version
-   21  # Initialize with uv
-   22  uv init
-   23  df -h
-   24  # Install all dependencies
-   25  uv sync --all-extras --all-groups
-   26  # Install dependencies - UV handles everything
-   27  uv sync
-   28  # Check what was installed
-   29  uv pip list
-   30  # See lock file
-   31  cat uv.lock
-   32  source .venv/bin/activate
-   33  history > commands.txt
-    
-    1  rm -rf src
-    2  rm -rf *
-    3  rm -rf .venv
-    4  rm -rf .gitignore
-    5  rm -rf .github
-    6  df -h
-    7  du -sh ~/* 2>/dev/null | sort -h
-    8  du -sh ~/.??* 2>/dev/null | sort -h
-    9  # Check Python version (requires 3.10+)
-   10  python --version
-   11  du -h --max-depth=1 ~/.local | sort -h
-   12  du -h --max-depth=1 ~/.local/share | sort -h
-   13  rm -rf ~/.cache/*
-   14  du -sh ~/.local
-   15  du -sh ~/.cache
-   16  df -h
-   17  # Check Python version (requires 3.10+)
-   18  python --version
-   19  # Verify uv installation
-   20  uv --version
-   21  # Initialize with uv
-   22  uv init
-   23  df -h
-   24  # Install all dependencies
-   25  uv sync --all-extras --all-groups
-   26  # Install dependencies - UV handles everything
-   27  uv sync
-   28  # Check what was installed
-   29  uv pip list
-   30  # See lock file
-   31  cat uv.lock
-   32  source .venv/bin/activate
-   33  history > commands.txt
-   34  git add .
-   35  git status
-   36  git commit -m "updated files"
-   37  git push origin main
-   38  df -h
-    1  rm -rf src
-    2  rm -rf *
-    3  rm -rf .venv
-    4  rm -rf .gitignore
-    5  rm -rf .github
-    6  df -h
-    7  du -sh ~/* 2>/dev/null | sort -h
-    8  du -sh ~/.??* 2>/dev/null | sort -h
-    9  # Check Python version (requires 3.10+)
-   10  python --version
-   11  du -h --max-depth=1 ~/.local | sort -h
-   12  du -h --max-depth=1 ~/.local/share | sort -h
-   13  rm -rf ~/.cache/*
-   14  du -sh ~/.local
-   15  du -sh ~/.cache
-   16  df -h
-   17  # Check Python version (requires 3.10+)
-   18  python --version
-   19  # Verify uv installation
-   20  uv --version
-   21  # Initialize with uv
-   22  uv init
-   23  df -h
-   24  # Install all dependencies
-   25  uv sync --all-extras --all-groups
-   26  # Install dependencies - UV handles everything
-   27  uv sync
-   28  # Check what was installed
-   29  uv pip list
-   30  # See lock file
-   31  cat uv.lock
-   32  source .venv/bin/activate
-   33  history > commands.txt
-   34  git add .
-   35  git status
-   36  git commit -m "updated files"
-   37  git push origin main
-   38  df -h
-   39  history >> commands
-   40  rm -rf commands
-   41  mkdir -p src && touch src/business/requirements.py
-   42  rm -rf src
-   43  mkdir -p src/business && touch src/business/requirements.py
-   44  mkdir -p tests/unit && touch tests/unit/test_business_requirements.py
-   45  tree -L 3
-   46  *.egg-info/
-   47  demand_forecasting.egg-info/
-   48  # Create __init__.py for business module
-   49  cat > src/business/__init__.py << 'EOF'
-"""Business requirements and KPIs module."""
+    1  source .venv/bin/activate
+    2  # Run all unit tests
+    3  uv run -m pytest tests/unit/ -v
+    4  # Run business requirements tests
+    5  uv run -m pytest tests/unit/test_business_requirements.py -v
+    6  # Run with coverage report
+    7  uv run -m pytest tests/unit/ -v --cov=src --cov-report=term
+    8  # Generate HTML coverage report
+    9  uv run -m pytest tests/unit/ -v --cov=src --cov-report=html
+   10  xdg-open htmlcov/index.html  # Linux
+   11  # Make verification script executable
+   12  chmod +x scripts/verify_data_collection.py
+   13  # Run verification script
+   14  uv run python scripts/verify_data_collection.py
+   15  # Run verification script
+   16  uv run -m python scripts.verify_data_collection.py
+   17  # Run verification script
+   18  uv run -m python scripts/verify_data_collection.py
+   19  # Run only async tests
+   20  uv run -m pytest tests/unit/test_data_collectors.py -v -m asyncio
+   21  # Run only unit tests
+   22  uv run -m pytest tests/unit/ -v -m unit
+   23  # Run all unit tests without marker filtering
+   24  uv run -m pytest tests/unit/ -v
+   25  # Run with coverage
+   26  uv run -m pytest tests/unit/ -v -m unit --cov=src --cov-report=term
+   27  # Run all tests
+   28  uv run -m pytest tests/unit/ -v
+   29  # Run with detailed output
+   30  uv run -m pytest tests/unit/test_data_collectors.py -v --tb=long
+   31  # Run with print statements visible
+   32  uv run -m pytest tests/unit/test_data_collectors.py -v -s
+   33  # Run with full traceback
+   34  uv run -m pytest tests/unit/test_data_collectors.py -v --full-trace
+   35  # Run with pdb on failure
+   36  uv run -m pytest tests/unit/test_data_collectors.py -v --pdb
+   37  # Check for dependency conflicts
+   38  uv pip check
+   39  uv run python -m scripts.verify_data_collection
+   40  history >> commands.txt
+   41  tree -L 3
+   42  rm -f commands.txt
+   43  rm -rf src/demand_forecasting.egg-info/
+   44  find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+   45  find . -type f -name "*.pyc" -delete 2>/dev/null
+   46  rm -rf .pytest_cache
+   47  rm -rf demand_forecasting.egg-info/
+   48  #!/bin/bash
+   49  # cleanup.sh - Remove temporary and generated files
+   50  echo "🧹 Cleaning up extra files..."
+   51  # Remove command history
+   52  rm -f commands.txt
+   53  # Remove egg-info (will regenerate on install)
+   54  rm -rf demand_forecasting.egg-info/
+   55  rm -rf src/demand_forecasting.egg-info/
+   56  # Remove HTML coverage reports
+   57  rm -rf htmlcov/
+   58  # Remove pytest cache
+   59  rm -rf .pytest_cache
+   60  # Remove Python cache
+   61  find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+   62  find . -type f -name "*.pyc" -delete 2>/dev/null
+   63  find . -type f -name "*.pyo" -delete 2>/dev/null
+   64  # Remove coverage files
+   65  rm -f .coverage coverage.xml
+   66  # Remove UV cache
+   67  rm -rf .uv_cache
+   68  echo "✅ Cleanup complete!"
+   69  # Show what's left
+   70  echo ""
+   71  echo "📁 Remaining files:"
+   72  tree -L 3 -I "__pycache__|*.pyc|*.pyo|.pytest_cache|htmlcov|*.egg-info"
+   73  cat >> .gitignore << 'EOF'
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Egg info
+*.egg-info/
+*.egg
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Temporary files
+*.log
+*.tmp
+commands.txt
+
+# UV cache
+.uv_cache/
 EOF
 
-   50  # Create __init__.py for tests
-   51  cat > tests/unit/__init__.py << 'EOF'
-"""Unit tests."""
-EOF
-
-   52  # Run all tests
-   53  uv run pytest tests/unit/test_business_requirements.py -v
-   54  # Run all tests
-   55  uv run -m  pytest tests/unit/test_business_requirements.py -v
-   56  # Run with coverage
-   57  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
-   58  # Install pytest-cov
-   59  uv pip install pytest-cov
-   60  # Run with coverage
-   61  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
-   62  # Run with coverage
-   63  uv run -m pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=term
-   64  # Run specific test
-   65  uv run pytest tests/unit/test_business_requirements.py::TestProjectRequirements::test_project_requirements_creation -v
-   66  # Run specific test
-   67  uv run -m pytest tests/unit/test_business_requirements.py::TestProjectRequirements::test_project_requirements_creation -v
-   68  mkdir -p scripts && touch scripts/verify_business_requirements.py
-   69  # Make it executable
-   70  chmod +x scripts/verify_business_requirements.py
-   71  # Run the verification script
-   72  uv run python scripts/verify_business_requirements.py
-   73  # Run the verification script
-   74  uv run -m python scripts/verify_business_requirements.py
-   75  # Install the package in development mode
-   76  uv pip install -e .
-   77  # Now run the script
-   78  uv run python scripts/verify_business_requirements.py
-   79  # Run verification
-   80  uv run python -m scripts/verify_business_requirements.py
-   81  # Run verification
-   82  uv run -m python scripts/verify_business_requirements.py
-   83  # Run the verification script
-   84  uv run -m python scripts.verify_business_requirements.py
-   85  # Package installed with uv pip install -e .
-   86  uv run python scripts/verify_business_requirements.py
-   87  uv run python -m scripts.verify_business_requirements
-   88  # 1. Import test
-   89  uv run python -c "from src.business.requirements import ProjectRequirements; print('✅ Import successful')"
-   90  # 4. Run with coverage
-   91  uv run pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=html
-   92  # 4. Run with coverage
-   93  uv run -m pytest tests/unit/test_business_requirements.py -v --cov=src.business --cov-report=html
-   94  # 5. Full test suite
-   95  uv run pytest tests/ -v
-   96  # 5. Full test suite
-   97  uv run -m pytest tests/ -v
-   98  history >> commands.txt
+   74  #!/bin/bash
+   75  # cleanup.sh - Remove temporary and generated files
+   76  echo "🧹 Cleaning up extra files..."
+   77  # Remove command history
+   78  rm -f commands.txt
+   79  # Remove egg-info (will regenerate on install)
+   80  rm -rf demand_forecasting.egg-info/
+   81  rm -rf src/demand_forecasting.egg-info/
+   82  # Remove HTML coverage reports
+   83  rm -rf htmlcov/
+   84  # Remove pytest cache
+   85  rm -rf .pytest_cache
+   86  # Remove Python cache
+   87  find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+   88  find . -type f -name "*.pyc" -delete 2>/dev/null
+   89  find . -type f -name "*.pyo" -delete 2>/dev/null
+   90  # Remove coverage files
+   91  rm -f .coverage coverage.xml
+   92  # Remove UV cache
+   93  rm -rf .uv_cache
+   94  echo "✅ Cleanup complete!"
+   95  # Show what's left
+   96  echo ""
+   97  echo "📁 Remaining files:"
+   98  tree -L 3 -I "__pycache__|*.pyc|*.pyo|.pytest_cache|htmlcov|*.egg-info"
+   99  # 1. Run all tests with coverage
+  100  uv run -m pytest tests/unit/ -v --cov=src --cov-report=term
+  101  # 2. Run verification scripts
+  102  uv run python scripts/verify_business_requirements.py
+  103  # 2. Run verification scripts
+  104  uv run python -m scripts/verify_business_requirements.py
+  105  # 2. Run verification scripts
+  106  uv run python -m scripts.verify_business_requirements.py
+  107  # Install the package
+  108  uv pip install -e .
+  109  # Now run the verification scripts
+  110  uv run python scripts/verify_business_requirements.py
+  111  uv run python -m scripts.verify_business_requirements
+  112  uv run python -m scripts.verify_data_collection.py
+  113  uv run python scripts/verify_data_collection.py
+  114  uv run python -m scripts/verify_data_collection.py
+  115  uv run -m python scripts/verify_data_collection.py
+  116  # Run business requirements verification
+  117  PYTHONPATH=/workspaces/Demand-Forecasting uv run python scripts/verify_business_requirements.py
+  118  # Run data collection verification
+  119  PYTHONPATH=/workspaces/Demand-Forecasting uv run python scripts/verify_data_collection.py
+  120  tree -L 3
+  121  history >> commands.txt
