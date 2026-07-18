@@ -1,9 +1,9 @@
 [project]
-name = "demand-forecasting"
+name = "customer-demand-forecasting"
 version = "0.1.0"
 description = "Production-grade MLOps platform for customer demand forecasting"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12, <3.13"
 authors = [
     {name = "Your Name", email = "your.email@example.com"}
 ]
@@ -36,6 +36,12 @@ dependencies = [
     "uvicorn[standard]",
     "python-dotenv",
     "pyyaml",
+    "boto3>=1.43.44",
+    "confluent-kafka>=2.15.0",
+    "datasets>=5.0.0",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "torchaudio>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -80,9 +86,31 @@ build-backend = "setuptools.build_meta"
 
 [tool.uv]
 dev-dependencies = [
+    "boto3>=1.43.44",
+    "confluent-kafka>=2.15.0",
+    "datasets>=5.0.0",
     "pytest>=7.4.0",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "pytest-timeout>=2.4.0",
     "ruff>=0.1.0",
 ]
+override-dependencies = [
+    "nvidia-nccl-cu12; sys_platform == 'never'",
+    "protobuf>=5.29.6",
+]
+# Only torch/torchvision/torchaudio are pinned to the CPU-only PyTorch index.
+# Everything else keeps resolving from PyPI as normal — this avoids the risk
+# of unrelated packages breaking because they don't exist on the PyTorch index.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.ruff]
 line-length = 100
@@ -114,9 +142,10 @@ disallow_untyped_defs = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --strict-markers"
+addopts = "-ra -q --strict-markers --cov=src --cov-report=term --cov-report=html"
 testpaths = ["tests"]
 pythonpath = ["."]
+asyncio_mode = "auto"
 markers = [
     "asyncio: Async tests",
     "unit: Unit tests",
