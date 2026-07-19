@@ -1,0 +1,3 @@
+# .trivyignore
+CVE-2026-54512  # jackson-databind bundled in ray_dist.jar — not controllable via pip; tracked for ray upstream fix
+CVE-2026-54513  # jackson-databind bundled in ray_dist.jar — same as above
