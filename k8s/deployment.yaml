@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demand-forecast-api
+  labels:
+    app: demand-forecast-api
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0   # never drop below desired capacity during rollout
+  selector:
+    matchLabels:
+      app: demand-forecast-api
+  template:
+    metadata:
+      labels:
+        app: demand-forecast-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: api
+          image: __IMAGE__
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: MLFLOW_TRACKING_URI
+              valueFrom:
+                configMapKeyRef: { name: demand-forecast-config, key: mlflow_tracking_uri }
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef: { name: demand-forecast-config, key: redis_host }
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef: { name: demand-forecast-config, key: redis_port }
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef: { name: demand-forecast-secrets, key: jwt-secret }
+            - name: RATE_LIMIT
+              value: "200"
+            - name: RATE_WINDOW
+              value: "60"
+            - name: ENVIRONMENT
+              value: "production"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          startupProbe:
+            httpGet: { path: /health, port: http }
+            failureThreshold: 20
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: { path: /ready, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                # give the load balancer time to deregister before SIGTERM
+                command: ["sh", "-c", "sleep 10"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 999
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels: { app: demand-forecast-api }
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: demand-forecast-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels: { app: demand-forecast-api }

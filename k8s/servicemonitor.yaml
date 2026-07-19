@@ -1,0 +1,24 @@
+# NOTE: Requires the Prometheus Operator CRDs (kube-prometheus-stack) to be
+# installed in the cluster. Not applied by CI against the ephemeral `kind`
+# cluster (the CRD doesn't exist there — `kubectl apply` would error with
+# "no matches for kind ServiceMonitor"). Apply manually once you have a
+# real cluster with the Prometheus Operator installed.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: demand-forecast-api
+  labels:
+    release: prometheus   # match your kube-prometheus-stack release label
+spec:
+  selector:
+    matchLabels:
+      app: demand-forecast-api
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+      - demand-forecast-prod
+      - demand-forecast-staging

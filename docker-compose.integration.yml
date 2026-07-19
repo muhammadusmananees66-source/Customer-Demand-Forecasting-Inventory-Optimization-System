@@ -1,0 +1,83 @@
+# services:
+#   mlflow:
+#     image: ghcr.io/mlflow/mlflow:v2.19.0
+#     ports:
+#       - "5000:5000"
+#     command: >
+#       mlflow server
+#       --host 0.0.0.0
+#       --port 5000
+#       --backend-store-uri sqlite:///mlflow.db
+#       --default-artifact-root /mlflow/artifacts
+#     volumes:
+#       - mlflow_data:/mlflow
+#     healthcheck:
+#       # Use Python instead of curl: the official mlflow image is slim and
+#       # does not reliably ship curl, which made the previous healthcheck
+#       # fail regardless of whether MLflow was actually serving requests.
+#       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=3)"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 10
+#       start_period: 20s
+
+#   redis:
+#     image: redis:7-alpine
+#     ports:
+#       - "6379:6379"
+#     healthcheck:
+#       test: ["CMD", "redis-cli", "ping"]
+#       interval: 5s
+#       timeout: 3s
+#       retries: 5
+
+# volumes:
+#   mlflow_data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.14.0  # MUST match your venv's `pip show mlflow` version exactly
+    ports:
+      - "5000:5000"
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    volumes:
+      - mlflow_data:/mlflow
+    healthcheck:
+      # Use Python instead of curl: the official mlflow image is slim and
+      # does not reliably ship curl, which made the previous healthcheck
+      # fail regardless of whether MLflow was actually serving requests.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  mlflow_data:
